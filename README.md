@@ -1,4 +1,4 @@
-# 🎮 ListaJuegos
+# ListaJuegos
 
 <p align="center">
   <img src="caratulas/captura.png" alt="Vista del buscador" width="500"/>
@@ -15,7 +15,7 @@
 
 ---
 
-## 📑 Tabla de Contenidos
+## Tabla de Contenidos
 
 - [📝 Descripcion general](#descripcion-general)
 - [✨ Caracteristicas principales](#caracteristicas-principales)
@@ -32,7 +32,7 @@
 
 ---
 
-## 📝 Descripcion general
+## Descripcion general
 
 ListaJuegos es una aplicacion web desarrollada en <img src="https://img.shields.io/badge/PHP-777BB4?style=flat-square&logo=php&logoColor=white" height="20"/> y <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black" height="20"/> que permite gestionar, consultar y enriquecer una base de datos de juegos de PlayStation (PSX y PS2).
 
@@ -40,7 +40,7 @@ El sistema esta disenado para ser modular, eficiente y facil de mantener, integr
 
 ---
 
-## ✨ Caracteristicas principales
+## Caracteristicas principales
 
 - 🔍 **Buscador inteligente y unificado**: busqueda por titulo o serial, con coincidencias exactas o sugerencias flexibles.
 - 🖼️ **Gestion automatica de caratulas**: descarga y almacenamiento desde la web si no existen en la base de datos.
@@ -54,13 +54,13 @@ El sistema esta disenado para ser modular, eficiente y facil de mantener, integr
 
 ---
 
-## 🔎 Vista principal del buscador
+## Vista principal del buscador
 
 A continuacion se muestra la interfaz principal del sistema.
 
 ---
 
-## 📁 Estructura del proyecto
+## Estructura del proyecto
 
 ```text
 listajuegos/
@@ -95,7 +95,7 @@ listajuegos/
 
 ---
 
-## ⚙️ Proceso de funcionamiento detallado
+## Proceso de funcionamiento detallado
 
 1. **Busqueda de juegos:** El usuario introduce un titulo o serial y selecciona la plataforma. El frontend envia la peticion a `buscar_datos.php` (POST), que consulta la base de datos y devuelve los datos en JSON.
 2. **Carga y gestion de caratulas:** Si el juego tiene caratula en la base de datos, se muestra directamente. Si no, el sistema busca la imagen en la web (ej. psxdatacenter.com), la descarga y la almacena automaticamente.
@@ -105,7 +105,7 @@ listajuegos/
 
 ---
 
-## 🛠️ Utilidades y scripts incluidos
+## Utilidades y scripts incluidos
 
 - **utilidad/utilidades.php**: Funciones comunes para limpieza, conexion a la base de datos, logs y utilidades generales.
 - **utilidad/guardar_imagen.php**: Descarga y guarda caratulas en la base de datos de forma automatica.
@@ -115,7 +115,7 @@ listajuegos/
 
 ---
 
-## 💻 Requisitos del sistema
+## Requisitos del sistema
 
 - <img src="https://img.shields.io/badge/PHP-7.4%2B-blue?logo=php&logoColor=white" height="20"/> PHP 7.4 o superior
 - <img src="https://img.shields.io/badge/MySQL%2FMariaDB-5.7%2B-blue?logo=mysql&logoColor=white" height="20"/> MySQL/MariaDB
@@ -124,7 +124,7 @@ listajuegos/
 
 ---
 
-## 🚀 Instalacion y primeros pasos
+## Instalacion y primeros pasos
 
 1. Clona el repositorio en tu servidor local (por ejemplo, XAMPP `htdocs`).
 2. Configura la base de datos MySQL y ajusta los datos de conexion en los scripts si es necesario.
@@ -133,7 +133,7 @@ listajuegos/
 
 ---
 
-## 🛡️ Seguridad y buenas practicas
+## Seguridad y buenas practicas
 
 - Validacion estricta de entradas y manejo de errores para evitar inyecciones SQL y vulnerabilidades comunes.
 - El acceso a scripts de importacion y utilidades debe restringirse a usuarios autorizados.
@@ -142,7 +142,7 @@ listajuegos/
 
 ---
 
-## 🗄️ Importar la base de datos
+## Importar la base de datos
 
 > Por motivos de tamaño y privacidad, **el archivo completo de base de datos (`sql/listajuegos.sql`) no se incluye en el repositorio**. Puedes solicitarlo o descargarlo desde un enlace externo si esta disponible.
 
@@ -168,13 +168,13 @@ mysql -u tu_usuario -p nombre_base_datos < sql/listajuegos.sql
 
 ---
 
-## 📄 Licencia
+## Licencia
 
 Este proyecto se distribuye bajo la licencia MIT. Consulta el archivo [LICENSE](LICENSE) para mas detalles.
 
 ---
 
-## 🤝 Creditos y agradecimientos
+## Creditos y agradecimientos
 
 - Inspirado en la comunidad de preservacion de videojuegos y coleccionismo.
 - Fuentes externas para caratulas: [psxdatacenter.com](https://psxdatacenter.com), entre otras.
