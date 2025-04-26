@@ -1,0 +1,13 @@
+# Ignorar archivos y carpetas sensibles
+.env
+*.log
+*.bak
+*.tmp
+*.swp
+composer.lock
+Log/
+utilidad/*.xlsx
+utilidad/*.csv
+listados/*.csv
+vendor/
+sql/

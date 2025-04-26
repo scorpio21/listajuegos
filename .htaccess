@@ -1,0 +1,46 @@
+# ======================
+# Seguridad y estructura para ListaJuegos
+# ======================
+
+# 1. Bloqueo de carpetas internas y recursos sensibles
+RedirectMatch 403 ^/listados/
+RedirectMatch 403 ^/banderas/
+RedirectMatch 403 ^/Log/
+RedirectMatch 403 ^/utilidad/
+RedirectMatch 403 ^/vendor/
+
+# 2. Bloqueo de archivos ocultos y de sistema
+<FilesMatch "^\.|
+\.(bak|tmp|swp|log|env|lock|json)$">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# 3. Deshabilitar listado de directorios
+Options -Indexes
+
+# 4. Protección contra ejecución de scripts en carpetas de imágenes y recursos
+<Directory "caratulas">
+  <FilesMatch "\.(php|pl|py|cgi|asp|js)$">
+    Order allow,deny
+    Deny from all
+  </FilesMatch>
+</Directory>
+<Directory "banderas">
+  <FilesMatch "\.(php|pl|py|cgi|asp|js)$">
+    Order allow,deny
+    Deny from all
+  </FilesMatch>
+</Directory>
+
+# 5. Opcional: Variables de entorno (NO incluir claves reales en producción o repositorios públicos)
+# SetEnv GOOGLE_API_KEY "TUPUBLICKEY"
+# SetEnv GOOGLE_CX "TUPUBLICCX"
+# SetEnv TWITCH_CLIENT_ID "TUPUBLICID"
+# SetEnv TWITCH_CLIENT_SECRET "TUPUBLICSECRET"
+
+# 6. Permitir acceso a index.php como documento principal
+DirectoryIndex index.php
+
+# 7. Reglas personalizadas adicionales aquí
+# (Por ejemplo, redirecciones, reescrituras, etc.)
