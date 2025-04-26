@@ -20,7 +20,7 @@
 - [📝 Descripción general](#descripción-general)
 - [✨ Características principales](#características-principales)
 - [🔎 Vista principal del buscador](#vista-principal-del-buscador)
-- [📁 Estructura profesional del proyecto](#estructura-profesional-del-proyecto)
+- [📁 Estructura del proyecto](#estructura-del-proyecto)
 - [⚙️ Proceso de funcionamiento detallado](#proceso-de-funcionamiento-detallado)
 - [🛠️ Utilidades y scripts incluidos](#utilidades-y-scripts-incluidos)
 - [💻 Requisitos del sistema](#requisitos-del-sistema)
@@ -56,11 +56,7 @@ El sistema está diseñado para ser modular, eficiente y fácil de mantener, int
 
 ## 🔎 Vista principal del buscador
 
-A continuación se muestra la interfaz principal del sistema:
-
-<p align="center">
-  <img src="caratulas/captura.png" alt="Vista del buscador" width="500"/>
-</p>
+A continuación se muestra la interfaz principal del sistema.
 
 ---
 
