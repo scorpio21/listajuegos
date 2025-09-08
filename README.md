@@ -72,7 +72,7 @@ listajuegos/
 │   ├── ntsc_u.png
 │   └── pal.png
 ├── buscar_api.php             # API REST para busqueda (GET)
-├── buscar_datos.php           # Backend de busqueda (POST)
+├── buscar_datos.php           # Backend de busqueda (GET/JSON)
 ├── caratulas/                 # Imagenes de caratulas y capturas
 │   ├── default.jpg
 │   ├── psx.png
@@ -83,6 +83,7 @@ listajuegos/
 ├── .htaccess                  # Reglas de seguridad para Apache
 ├── index.php                  # Interfaz principal (frontend)
 ├── juegos_incompletos.php     # Listado de juegos con datos faltantes
+├── ver_imagen.php             # Sirve carátulas desde la BD (BLOB)
 ├── Log/                       # Carpeta de logs
 ├── README.md                  # Documentacion principal
 ├── sql/                      # Copia de la base de datos (exportacion)
@@ -97,8 +98,8 @@ listajuegos/
 
 ## Proceso de funcionamiento detallado
 
-1. **Busqueda de juegos:** El usuario introduce un titulo o serial y selecciona la plataforma. El frontend envia la peticion a `buscar_datos.php` (POST), que consulta la base de datos y devuelve los datos en JSON.
-2. **Carga y gestion de caratulas:** Si el juego tiene caratula en la base de datos, se muestra directamente. Si no, el sistema busca la imagen en la web (ej. psxdatacenter.com), la descarga y la almacena automaticamente.
+1. **Búsqueda de juegos:** El usuario introduce un título o serial y selecciona la plataforma. El frontend envía la petición a `buscar_datos.php` (GET), que consulta la base de datos y devuelve los datos en JSON (coincidencia exacta o lista de sugerencias).
+2. **Carga y gestión de carátulas:** Si el juego tiene carátula en la base de datos, se sirve desde `ver_imagen.php?serial=...`. Si no, el frontend muestra una imagen por defecto según plataforma. Se puede guardar una carátula haciendo clic sobre la imagen.
 3. **Edicion y actualizacion:** El usuario puede editar campos incompletos y guardar los cambios, que se actualizan en la base de datos.
 4. **Importacion masiva:** Utilidades para importar listados de juegos y caratulas desde archivos externos.
 5. **Control de calidad:** El sistema identifica juegos con datos incompletos y facilita su correccion.
@@ -157,14 +158,49 @@ Para que puedas utilizar la base de datos del proyecto, sigue estos pasos:
 5. Pulsa en **Seleccionar archivo** y elige el archivo `sql/listajuegos.sql` incluido en el repositorio.
 6. Haz clic en **Continuar** para importar la estructura y los datos.
 
-### Usando la terminal (opcional)
+### Usando la terminal (PowerShell/CMD en XAMPP, recomendado para archivos grandes)
 
-Si prefieres la linea de comandos y tienes acceso a `mysqldump` o `mysql`:
+Para evitar límites de tamaño de phpMyAdmin, usa `mysql.exe` de XAMPP en Windows.
 
-```sh
-mysql -u tu_usuario -p nombre_base_datos < sql/listajuegos.sql
+1. Asegúrate de que MySQL esté "Running" en XAMPP.
+2. Abre PowerShell y ejecuta (root sin contraseña):
+
+```powershell
+& "d:\xampp\mysql\bin\mysql.exe" -u root -e "CREATE DATABASE IF NOT EXISTS listajuegos CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+cmd /c ""d:\xampp\mysql\bin\mysql.exe" -u root listajuegos < "d:\xampp\htdocs\listajuegos\sql\listajuegos.sql""
 ```
-- Cambia `tu_usuario` por tu usuario de MySQL y `nombre_base_datos` por el nombre de la base de datos que hayas creado.
+
+Si root tiene contraseña, añade `-p` y escribe la clave cuando se solicite.
+
+Notas:
+- Si PowerShell muestra error con `<`, usa `cmd /c` como en el ejemplo.
+- Si aparece "packet too large", edita `d:\xampp\mysql\bin\my.ini` y en `[mysqld]` añade `max_allowed_packet=256M`, reinicia MySQL.
+
+### Endpoints disponibles
+
+- `buscar_datos.php?titulo=...&plataforma=psx|ps2` → JSON de búsqueda (exacta/parcial/flexible).
+- `obtener_juego.php?serial=SERIAL` → JSON con un juego.
+- `juegos_incompletos.php?plataforma=psx|ps2` → JSON con seriales incompletos.
+- `juegos_incompletos.php?estadisticas_vacios=1` → JSON con conteos por campo/plataforma.
+- `utilidad/guardar_imagen.php` (POST JSON `{serial, url}`) → Guarda carátula (BLOB) en BD.
+- `ver_imagen.php?serial=SERIAL[&tipo=caratula]` → Sirve la carátula desde la BD.
+
+### Carátulas: guardar y visualizar
+
+- La interfaz muestra una imagen por defecto si no existe carátula en BD.
+- Para guardar una carátula del juego actual, haz clic sobre la imagen. El sistema guardará el binario de la URL actual (admite URL http/https o ruta local como `caratulas/psx.png`).
+- Después de guardar, `ver_imagen.php?serial=SERIAL` servirá la imagen desde la tabla `imagenes`.
+
+### .htaccess en Apache 2.4
+
+Se incluyen reglas compatibles con Apache 2.4:
+
+- `RewriteRule` para bloquear acceso web a carpetas sensibles (`vendor/`, `Log/`).
+- `Options -Indexes` para evitar listados de directorios.
+- Bloqueo de ejecución de scripts dentro de `caratulas/` y `banderas/` (se sirven solo imágenes).
+- `DirectoryIndex index.php` como documento principal.
+
+Si tu entorno cambia, revisa `/.htaccess` y ajusta las reglas según sea necesario.
 
 ---
 

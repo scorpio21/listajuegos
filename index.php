@@ -248,12 +248,8 @@ function rellenarCampos(juego) {
     document.getElementById('fecha').value = (juego.fecha || '').replace(/^\s+|\s+$/g, '');
     document.getElementById('plataforma').value = juego.plataforma || '';
     let img = document.getElementById('caratula-preview');
-    // Mostrar carátula real si existe, si no, imagen por defecto de la plataforma
-    if (juego.caratula_url && juego.caratula_url.startsWith('http')) {
-        img.src = juego.caratula_url;
-        img.style.display = '';
-        document.getElementById('caratula').value = juego.caratula_url;
-    } else {
+    // Mostrar carátula real si existe (acepta URL absoluta o relativa), si no, imagen por defecto de la plataforma
+    const aplicarFallback = () => {
         if (juego.plataforma === 'psx') {
             img.src = 'caratulas/psx.png';
             img.style.display = '';
@@ -265,6 +261,14 @@ function rellenarCampos(juego) {
             img.style.display = 'none';
         }
         document.getElementById('caratula').value = '';
+    };
+    if (juego.caratula_url && juego.caratula_url.trim() !== '') {
+        img.onerror = aplicarFallback; // si falla la carga, usa fallback
+        img.src = juego.caratula_url;
+        img.style.display = '';
+        document.getElementById('caratula').value = juego.caratula_url;
+    } else {
+        aplicarFallback();
     }
     let existente = document.getElementById('resultados-lista');
     if (existente) existente.remove();
@@ -491,7 +495,8 @@ document.addEventListener('DOMContentLoaded', function() {
     img.style.cursor = 'pointer';
     img.title = 'Haz clic para guardar la imagen en la base de datos';
     img.addEventListener('click', function() {
-      let serial = document.getElementById('edit-serial-incompleto').value;
+      let serialInput = document.getElementById('serial');
+      let serial = serialInput ? serialInput.value : '';
       let url = img.src;
       if (!serial || !url) return;
       fetch('utilidad/guardar_imagen.php', {

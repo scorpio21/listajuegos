@@ -3,35 +3,21 @@
 # ======================
 
 # 1. Bloqueo de carpetas internas y recursos sensibles
-RedirectMatch 403 ^/listados/
-RedirectMatch 403 ^/banderas/
-RedirectMatch 403 ^/Log/
-RedirectMatch 403 ^/utilidad/
-RedirectMatch 403 ^/vendor/
+RewriteEngine On
+# Bloquear acceso directo a carpetas internas sensibles (permitimos recursos necesarios)
+RewriteRule ^(vendor|Log)/ - [F,L]
 
 # 2. Bloqueo de archivos ocultos y de sistema
-<FilesMatch "^\.|
-\.(bak|tmp|swp|log|env|lock|json)$">
-  Order allow,deny
-  Deny from all
+<FilesMatch "^(?:\.||.*\.(?:bak|tmp|swp|log|env|lock|json))$">
+  Require all denied
 </FilesMatch>
 
 # 3. Deshabilitar listado de directorios
 Options -Indexes
 
-# 4. Protección contra ejecución de scripts en carpetas de imágenes y recursos
-<Directory "caratulas">
-  <FilesMatch "\.(php|pl|py|cgi|asp|js)$">
-    Order allow,deny
-    Deny from all
-  </FilesMatch>
-</Directory>
-<Directory "banderas">
-  <FilesMatch "\.(php|pl|py|cgi|asp|js)$">
-    Order allow,deny
-    Deny from all
-  </FilesMatch>
-</Directory>
+# 4. Evitar ejecución de scripts dentro de carpetas de recursos estáticos
+# Permitimos servir imágenes, pero denegamos acceso a scripts en esas rutas
+RewriteRule ^(caratulas|banderas)/.*\.(php|pl|py|cgi|asp|js)$ - [F,L]
 
 # 5. Opcional: Variables de entorno (NO incluir claves reales en producción o repositorios públicos)
 # SetEnv GOOGLE_API_KEY "TUPUBLICKEY"
